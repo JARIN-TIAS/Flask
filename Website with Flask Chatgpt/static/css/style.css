@@ -1,0 +1,141 @@
+/* General body and font styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #81c784, #388e3c); /* Gradient green background */
+    color: #2e7d32;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Header styles */
+header {
+    background-color: #1b5e20;
+    padding: 1.5em 0;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 2em;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #81c784; /* Light green on hover */
+}
+
+/* Main content styles */
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: 3em auto;
+    color: #fff;
+}
+
+/* Hero section */
+.hero {
+    text-align: center;
+    padding: 5em 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.5s ease;
+}
+
+.hero h1 {
+    font-size: 3em;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 1.2em;
+    font-weight: 300;
+}
+
+.hero:hover {
+    transform: scale(1.05);
+}
+
+/* About Section with cool background */
+.about {
+    padding: 3em 2em;
+    text-align: center;
+    background: linear-gradient(135deg, #c8e6c9, #81c784); /* Cool green gradient */
+    border-radius: 10px;
+    margin-top: 2em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: black; /* Ensure the text remains readable */
+}
+
+
+.about h2 {
+    font-size: 2.5em;
+    font-weight: 600;
+}
+
+/* Projects Section */
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2em;
+    margin-top: 3em;
+}
+
+.project {
+    background-color: #c8e6c9; /* Lighter green background */
+    padding: 2em;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.project:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.project h3 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+    font-weight: 600;
+    color: black; /* Text color set to black */
+}
+
+.project p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 1em;
+    background-color: rgb(27, 94, 32);
+    color: rgb(255, 255, 255); /* Set footer text color to black */
+    width: 100%;
+    margin-top: 3em;
+}
