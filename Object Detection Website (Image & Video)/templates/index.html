@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detect Your Object 😊</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=fallback">
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Custom CSS for Green Theme -->
+    <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: #eafaf1;  /* Light Greenish Background */
+            color: #2c6e49;  /* Dark Green Text */
+        }
+
+        .container {
+            padding-top: 50px;
+        }
+
+        .heading {
+            font-size: 2.5rem;
+            color: #2c6e49;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #44bba9;  /* Greenish Button */
+            color: white;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #38a295;
+        }
+
+        .card {
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .card-header {
+            background-color: #2c6e49;
+            color: white;
+        }
+
+        .card-body {
+            background-color: #f1f8f2;  /* Light Greenish Card Background */
+        }
+
+        .file-upload-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .file-upload-section input[type="file"] {
+            border: 2px solid #38a295;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .file-upload-section input[type="file"]:hover {
+            border-color: #2c6e49;
+        }
+
+        .detected-content {
+            text-align: center;
+        }
+
+        .detected-content img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .detected-content video {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Heading Section -->
+            <h1 class="heading">Detect Your Object 😊</h1>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Upload Your File for Object Detection</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/" method="POST" enctype="multipart/form-data">
+                        <!-- File Upload Section -->
+                        <div class="file-upload-section">
+                            <input type="file" name="file" accept="image/*, video/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-block">Upload & Detect</button>
+                    </form>
+
+                    <!-- Show Uploaded Image/Video -->
+                    {% if image_path %}
+                    <div class="detected-content mt-3">
+                        <h5>Detected Image/Video:</h5>
+                        {% if image_path.endswith('.jpg') %}
+                            <img src="{{ image_path }}" alt="Detected Image">
+                        {% else %}
+                            <video controls>
+                                <source src="{{ image_path }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
