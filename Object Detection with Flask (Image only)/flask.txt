@@ -1,0 +1,98 @@
+from flask import Flask, render_template, request, jsonify
+import os
+import pickle
+import torch
+import cv2
+from werkzeug.utils import secure_filename
+
+app = Flask(__name__)
+
+# Set up file upload folder and allowed file types
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'mp4', 'avi'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB limit
+
+# Ensure upload folder exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+# Load the pickled YOLO model
+try:
+    with open('best_model.pkl', 'rb') as f:
+        model = pickle.load(f)
+except Exception as e:
+    print(f"Error loading model: {e}")
+    model = None
+
+# Function to check allowed file types
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'})
+    
+    file = request.files['file']
+    
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        
+        # Perform prediction using the loaded YOLO model
+        if model:
+            try:
+                result_file = run_inference(model, file_path, filename)
+                result_path = os.path.join('static', 'uploads', result_file)
+                return jsonify({'result': result_path})
+            except Exception as e:
+                return jsonify({'error': f'Inference failed: {e}'})
+        else:
+            return jsonify({'error': 'Model not loaded correctly'})
+    return jsonify({'error': 'Invalid file format'})
+
+# Define function for running inference with YOLO model
+def run_inference(model, file_path, filename):
+    # Read the image or video from file
+    if file_path.endswith(('.jpg', '.jpeg', '.png')):
+        image = cv2.imread(file_path)
+        # Perform inference (adjust based on your YOLO model usage)
+        result_image = "processed_" + filename  # Save the processed image with a new name
+        result_image_path = os.path.join(app.config['UPLOAD_FOLDER'], result_image)
+        # Save the processed image after inference (you may apply detection here)
+        cv2.imwrite(result_image_path, image)
+        return result_image  # Return the relative path
+
+    elif file_path.endswith(('.mp4', '.avi')):
+        cap = cv2.VideoCapture(file_path)
+        result_video = "processed_" + filename  # Save the processed video with a new name
+        result_video_path = os.path.join(app.config['UPLOAD_FOLDER'], result_video)
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Use appropriate codec
+        out = cv2.VideoWriter(result_video_path, fourcc, 30.0, (640, 480))
+
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            # Perform inference on each frame (adjust based on your YOLO model usage)
+            out.write(frame)  # Write the processed frame to output video
+
+        cap.release()
+        out.release()
+        return result_video  # Return the relative path
+
+    else:
+        raise ValueError("Unsupported file format")
+    
+if __name__ == '__main__':
+    app.run(debug=True)
